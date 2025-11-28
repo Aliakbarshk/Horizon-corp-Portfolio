@@ -3,40 +3,6 @@ import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Stars, Float, MeshDistortMaterial, PerspectiveCamera, Environment, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
 
-// Augment JSX namespace to recognize Three.js elements as intrinsic elements
-// We augment both global JSX (legacy/standard) and React.JSX (React 18+) to ensure coverage
-declare global {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      mesh: any;
-      sphereGeometry: any;
-      torusGeometry: any;
-      meshBasicMaterial: any;
-      ambientLight: any;
-      spotLight: any;
-      pointLight: any;
-      fog: any;
-    }
-  }
-}
-
-declare module 'react' {
-  namespace JSX {
-    interface IntrinsicElements {
-      group: any;
-      mesh: any;
-      sphereGeometry: any;
-      torusGeometry: any;
-      meshBasicMaterial: any;
-      ambientLight: any;
-      spotLight: any;
-      pointLight: any;
-      fog: any;
-    }
-  }
-}
-
 // Rig that moves camera based on mouse parallax
 const CameraRig = () => {
   const { camera, mouse } = useThree();
@@ -82,9 +48,9 @@ const FluidSaturn = () => {
     <group ref={groupRef} rotation={[0.4, 0, 0.2]}>
       <Float speed={2} rotationIntensity={0.2} floatIntensity={1}>
         
-        {/* The Planet - Fluid Sphere */}
+        {/* The Planet - Fluid Sphere (Optimized Geometry) */}
         <mesh ref={planetRef} scale={1.8}>
-          <sphereGeometry args={[1, 64, 64]} />
+          <sphereGeometry args={[1, 32, 32]} />
           <MeshDistortMaterial
             color="#2563eb" // Horizon Blue
             emissive="#1d4ed8"
@@ -96,9 +62,9 @@ const FluidSaturn = () => {
           />
         </mesh>
 
-        {/* The Ring - Fluid Torus */}
+        {/* The Ring - Fluid Torus (Optimized Geometry) */}
         <mesh ref={ringRef} rotation-x={Math.PI / 1.8}>
-          <torusGeometry args={[3, 0.4, 64, 100]} />
+          <torusGeometry args={[3, 0.4, 32, 64]} />
           <MeshDistortMaterial
             color="#a855f7" // Purple/Pink Hue for contrast
             emissive="#000000"
@@ -123,7 +89,8 @@ const FluidSaturn = () => {
 export const BackgroundScene: React.FC = () => {
   return (
     <div className="fixed inset-0 z-0 pointer-events-none bg-[#050505]">
-      <Canvas dpr={[1, 2]} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}>
+      {/* Cap Pixel Ratio at 1.5 to prevent lag on 4K/Retina screens */}
+      <Canvas dpr={[1, 1.5]} gl={{ antialias: true, toneMapping: THREE.ACESFilmicToneMapping }}>
         <PerspectiveCamera makeDefault position={[0, 0, 14]} fov={45} />
         
         <CameraRig />
@@ -136,10 +103,10 @@ export const BackgroundScene: React.FC = () => {
         
         <FluidSaturn />
         
-        <Stars radius={100} depth={50} count={7000} factor={4} saturation={0} fade speed={1} />
+        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
         
         {/* Floating dust particles for depth */}
-        <Sparkles count={200} scale={20} size={2} speed={0.4} opacity={0.5} color="#cbd5e1" />
+        <Sparkles count={150} scale={20} size={2} speed={0.4} opacity={0.5} color="#cbd5e1" />
         
         <Environment preset="city" />
         

@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { ArrowRight, Play, X } from 'lucide-react';
 
-const MagneticButton = ({ children, className = "" }: { children: React.ReactNode, className?: string }) => {
+const MagneticButton: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
     const btnRef = useRef<HTMLButtonElement>(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 

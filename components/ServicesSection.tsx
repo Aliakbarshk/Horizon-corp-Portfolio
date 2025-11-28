@@ -47,7 +47,7 @@ const services: Service[] = [
   }
 ];
 
-const TiltCard = ({ service }: { service: Service }) => {
+const TiltCard: React.FC<{ service: Service }> = ({ service }) => {
     const cardRef = useRef<HTMLDivElement>(null);
     const [rotation, setRotation] = useState({ x: 0, y: 0 });
     const [glowPos, setGlowPos] = useState({ x: 50, y: 50 });
