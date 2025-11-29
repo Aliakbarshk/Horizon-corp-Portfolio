@@ -59,6 +59,8 @@ class SoundManager {
 
   // High-tech chirp for hover events
   playHover() {
+    // Hover cannot initialize audio context in most browsers, 
+    // so we only play if already initialized
     if (!this.ctx || !this.masterGain) return;
     
     const osc = this.ctx.createOscillator();
@@ -80,6 +82,9 @@ class SoundManager {
 
   // Satisfying "click" / "engage" sound
   playClick() {
+    // Auto-initialize on first click if needed
+    if (!this.ctx) this.init();
+    
     if (!this.ctx || !this.masterGain) return;
 
     const osc = this.ctx.createOscillator();
@@ -101,6 +106,9 @@ class SoundManager {
 
   // NEW: A majestic "Reverbed Ting" for special buttons
   playReverbTing() {
+    // Auto-initialize on first click if needed
+    if (!this.ctx) this.init();
+
     if (!this.ctx || !this.masterGain) return;
 
     const t = this.ctx.currentTime;

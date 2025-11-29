@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, Suspense } from 'react';
 import { Canvas, useFrame } from '@react-three/fiber';
-import { Float, Text } from '@react-three/drei';
+import { Float } from '@react-three/drei';
 import * as THREE from 'three';
 import { soundManager } from '../utils/SoundManager';
 import { ArrowRight } from 'lucide-react';
@@ -39,19 +39,6 @@ const WireframeSaturn = () => {
         <torusGeometry args={[1.8, 0.2, 2, 32]} />
         <meshBasicMaterial color="white" wireframe transparent opacity={0.2} />
       </mesh>
-      
-      {/* Text in 3D Space - Using Default Font for Stability */}
-      <Float speed={2} rotationIntensity={0.1} floatIntensity={0.5}>
-        <Text
-            position={[0, -2.5, 0]}
-            fontSize={0.2}
-            color="white"
-            anchorX="center"
-            anchorY="middle"
-        >
-            SYSTEM INITIALIZING...
-        </Text>
-      </Float>
     </group>
   );
 };
@@ -98,14 +85,26 @@ export const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
 
     return (
         <div className="fixed inset-0 z-[100] bg-black flex flex-col items-center justify-center">
-            <div className="w-full h-[60vh]">
+            {/* 3D Visualizer */}
+            <div className="w-full h-[50vh] relative">
                 <Canvas camera={{ position: [0, 0, 6] }} dpr={[1, 1.5]}>
-                    <WireframeSaturn />
-                    <ambientLight intensity={0.5} />
+                    <Suspense fallback={null}>
+                        <Float speed={2} rotationIntensity={0.1} floatIntensity={0.5}>
+                            <WireframeSaturn />
+                        </Float>
+                        <ambientLight intensity={0.5} />
+                    </Suspense>
                 </Canvas>
+                
+                {/* HTML Text Overlay (Instant Render) */}
+                <div className="absolute inset-0 flex items-end justify-center pb-10 pointer-events-none">
+                     <p className="text-white font-mono tracking-[0.3em] text-sm animate-pulse">
+                        SYSTEM INITIALIZING...
+                     </p>
+                </div>
             </div>
 
-            <div className="absolute bottom-20 flex flex-col items-center gap-6">
+            <div className="flex flex-col items-center gap-6 mt-8">
                 {!ready ? (
                     <div className="w-64 h-1 bg-gray-800 rounded-full overflow-hidden">
                         <div 
@@ -117,7 +116,7 @@ export const Loader: React.FC<LoaderProps> = ({ onComplete }) => {
                     <button 
                         onClick={handleEnter}
                         onMouseEnter={() => soundManager.playHover()}
-                        className="group relative px-8 py-3 bg-white text-black font-bold tracking-widest uppercase text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 animate-in fade-in zoom-in duration-300"
+                        className="group relative px-8 py-3 bg-white text-black font-bold tracking-widest uppercase text-sm rounded-full overflow-hidden hover:scale-105 transition-transform duration-300 animate-in fade-in zoom-in duration-300 cursor-pointer pointer-events-auto"
                     >
                         <span className="relative z-10 flex items-center gap-2">
                             Enter Horizon <ArrowRight size={16} />

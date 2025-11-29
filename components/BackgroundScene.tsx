@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, Suspense } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { Stars, Float, MeshDistortMaterial, PerspectiveCamera, Environment, Sparkles } from '@react-three/drei';
 import * as THREE from 'three';
@@ -101,14 +101,14 @@ export const BackgroundScene: React.FC = () => {
         <spotLight position={[-15, -10, 10]} angle={0.4} penumbra={1} intensity={2} color="#f43f5e" />
         <pointLight position={[0, 0, 5]} intensity={0.5} color="#ffffff" />
         
-        <FluidSaturn />
-        
-        <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
-        
+        <Suspense fallback={null}>
+            <FluidSaturn />
+            <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
+            <Environment preset="city" />
+        </Suspense>
+
         {/* Floating dust particles for depth */}
         <Sparkles count={150} scale={20} size={2} speed={0.4} opacity={0.5} color="#cbd5e1" />
-        
-        <Environment preset="city" />
         
         <fog attach="fog" args={['#050505', 10, 40]} />
       </Canvas>

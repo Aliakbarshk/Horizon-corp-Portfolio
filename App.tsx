@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { BackgroundScene } from './components/BackgroundScene';
 import { Navbar } from './components/Navbar';
 import { HeroSection } from './components/HeroSection';
@@ -10,49 +10,41 @@ import { SpaceshipGame } from './components/SpaceshipGame';
 import { ContactSection } from './components/ContactSection';
 import { Footer } from './components/Footer';
 import { Loader } from './components/Loader';
+import { FounderSection } from './components/FounderSection';
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [fadeOut, setFadeOut] = useState(false);
-
-  const handleLoadComplete = () => {
-    setFadeOut(true);
-    // Allow animation to play out before unmounting
-    setTimeout(() => {
-        setLoading(false);
-    }, 800);
-  };
 
   return (
-    <>
-      {/* Loading Screen */}
-      {loading && (
-        <div 
-          className={`fixed inset-0 z-[100] transition-opacity duration-700 ease-in-out ${fadeOut ? 'opacity-0 pointer-events-none' : 'opacity-100'}`}
-        >
-            <Loader onComplete={handleLoadComplete} />
+    <div className="min-h-screen bg-[#050505] text-white selection:bg-blue-500/30">
+      
+      {/* Show Loader until user enters */}
+      {loading && <Loader onComplete={() => setLoading(false)} />}
+
+      {/* Main Content - Only visible when not loading to improve performance and suspense */}
+      {!loading && (
+        <div className="animate-fade-in">
+          {/* 3D Background - Wrapped in Suspense */}
+          <Suspense fallback={null}>
+              <BackgroundScene />
+          </Suspense>
+
+          {/* Foreground Content */}
+          <main className="relative z-10">
+            <Navbar />
+            <HeroSection />
+            <StatsSection />
+            <ProcessSection />
+            <ServicesSection />
+            <ProjectsSection />
+            <SpaceshipGame />
+            <FounderSection />
+            <ContactSection />
+            <Footer />
+          </main>
         </div>
       )}
-
-      {/* Main App */}
-      <div className={`min-h-screen bg-[#050505] text-white selection:bg-blue-500/30`}>
-        {/* 3D Background - Fixed Position - Rendered always but hidden by loader initially */}
-        <BackgroundScene />
-
-        {/* Foreground Content - Scrollable */}
-        <main className={`relative z-10 transition-opacity duration-1000 delay-300 ${loading && !fadeOut ? 'opacity-0' : 'opacity-100'}`}>
-          <Navbar />
-          <HeroSection />
-          <StatsSection />
-          <ProcessSection />
-          <ServicesSection />
-          <ProjectsSection />
-          <SpaceshipGame />
-          <ContactSection />
-          <Footer />
-        </main>
-      </div>
-    </>
+    </div>
   );
 }
 
