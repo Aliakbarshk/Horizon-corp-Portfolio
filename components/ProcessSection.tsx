@@ -147,13 +147,13 @@ export const ProcessSection: React.FC = () => {
 
                 {/* Bottom Interactive Area */}
                 <div className="mt-20 text-center">
-                    <button className="group relative px-10 py-5 bg-white text-black font-black tracking-widest uppercase text-sm hover:bg-blue-500 hover:text-white transition-all duration-300 clip-path-slant">
+                    <a href="#contact" className="inline-block group relative px-10 py-5 bg-white text-black font-black tracking-widest uppercase text-sm hover:bg-blue-500 hover:text-white transition-all duration-300 clip-path-slant">
                         <span className="relative z-10 flex items-center gap-3">
                             Initialize Project <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </span>
-                        {/* Slanted corner cut effect handled by CSS or clip-path if needed, sticking to standard shape for now but added hover glow */}
+                        {/* Hover glow effect */}
                         <div className="absolute inset-0 bg-blue-600 blur-xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 -z-10"></div>
-                    </button>
+                    </a>
                 </div>
 
             </div>

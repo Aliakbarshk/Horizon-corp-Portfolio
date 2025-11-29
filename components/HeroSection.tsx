@@ -1,13 +1,20 @@
 import React, { useRef, useState } from 'react';
 import { ArrowRight, Play, X } from 'lucide-react';
 
-const MagneticButton: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className = "" }) => {
-    const btnRef = useRef<HTMLButtonElement>(null);
+interface MagneticButtonProps {
+  children: React.ReactNode;
+  className?: string;
+  onClick?: () => void;
+  href?: string;
+}
+
+const MagneticButton: React.FC<MagneticButtonProps> = ({ children, className = "", onClick, href }) => {
+    const ref = useRef<HTMLElement>(null);
     const [position, setPosition] = useState({ x: 0, y: 0 });
 
-    const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
-        if (!btnRef.current) return;
-        const rect = btnRef.current.getBoundingClientRect();
+    const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+        if (!ref.current) return;
+        const rect = ref.current.getBoundingClientRect();
         const x = e.clientX - (rect.left + rect.width / 2);
         const y = e.clientY - (rect.top + rect.height / 2);
         setPosition({ x: x * 0.2, y: y * 0.2 });
@@ -17,13 +24,27 @@ const MagneticButton: React.FC<{ children: React.ReactNode; className?: string }
         setPosition({ x: 0, y: 0 });
     };
 
+    const commonProps = {
+      onMouseMove: handleMouseMove,
+      onMouseLeave: handleMouseLeave,
+      className: `transition-transform duration-200 ease-out inline-block ${className}`,
+      style: { transform: `translate(${position.x}px, ${position.y}px)` },
+      onClick
+    };
+
+    // Render as <a> if href is provided, otherwise as <div> or <button>
+    if (href) {
+      return (
+        <a href={href} ref={ref as React.RefObject<HTMLAnchorElement>} {...commonProps}>
+          {children}
+        </a>
+      );
+    }
+
     return (
         <button
-            ref={btnRef}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            className={`transition-transform duration-200 ease-out ${className}`}
-            style={{ transform: `translate(${position.x}px, ${position.y}px)` }}
+            ref={ref as React.RefObject<HTMLButtonElement>}
+            {...commonProps}
         >
             {children}
         </button>
@@ -68,22 +89,18 @@ export const HeroSection: React.FC = () => {
 
         {/* Interactive Buttons */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-          <a href="#contact" className="no-underline">
-            <MagneticButton className="group relative px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.5)]">
-                <span className="relative z-10 flex items-center gap-2">
-                Start Project <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-                </span>
-            </MagneticButton>
-          </a>
+          <MagneticButton href="#contact" className="group relative px-10 py-5 bg-white text-black rounded-full font-bold text-lg hover:shadow-[0_0_50px_-10px_rgba(255,255,255,0.5)]">
+              <span className="relative z-10 flex items-center gap-2">
+              Start Project <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </span>
+          </MagneticButton>
           
-          <div onClick={() => setShowVideo(true)}>
-            <MagneticButton className="group px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md text-white rounded-full font-semibold text-lg flex items-center gap-3 cursor-pointer">
-                <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center group-hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/50">
-                    <Play className="w-3 h-3 fill-white ml-0.5" />
-                </div>
-                <span>Showreel</span>
-            </MagneticButton>
-          </div>
+          <MagneticButton onClick={() => setShowVideo(true)} className="group px-10 py-5 bg-white/5 hover:bg-white/10 border border-white/10 backdrop-blur-md text-white rounded-full font-semibold text-lg flex items-center gap-3 cursor-pointer">
+              <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center group-hover:bg-blue-500 transition-colors shadow-lg shadow-blue-900/50">
+                  <Play className="w-3 h-3 fill-white ml-0.5" />
+              </div>
+              <span>Showreel</span>
+          </MagneticButton>
         </div>
       </div>
 

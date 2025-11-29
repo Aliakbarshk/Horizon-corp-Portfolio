@@ -31,14 +31,14 @@ export const ProjectsSection: React.FC = () => {
                         <span className="text-blue-500 font-bold uppercase tracking-widest text-sm mb-2 block">Selected Works</span>
                         <h2 className="text-4xl md:text-5xl font-bold text-white">Recent <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-400">Deployments</span></h2>
                     </div>
-                    <button className="hidden md:flex items-center gap-2 text-sm font-bold text-white border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors">
-                        VIEW ALL <ExternalLink className="w-4 h-4" />
-                    </button>
+                    <a href="#contact" className="hidden md:flex items-center gap-2 text-sm font-bold text-white border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors group">
+                        VIEW ALL <ExternalLink className="w-4 h-4 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" />
+                    </a>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {projects.map((project, index) => (
-                        <div key={index} className="group relative rounded-2xl overflow-hidden aspect-[4/5] cursor-pointer">
+                        <a href="#contact" key={index} className="group relative rounded-2xl overflow-hidden aspect-[4/5] cursor-pointer block">
                             <img 
                                 src={project.image} 
                                 alt={project.title} 
@@ -59,14 +59,14 @@ export const ProjectsSection: React.FC = () => {
                                     {project.stats}
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     ))}
                 </div>
                 
                 <div className="mt-8 text-center md:hidden">
-                    <button className="inline-flex items-center gap-2 text-sm font-bold text-white border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors">
+                    <a href="#contact" className="inline-flex items-center gap-2 text-sm font-bold text-white border border-white/20 rounded-full px-6 py-3 hover:bg-white/10 transition-colors">
                         VIEW ALL <ExternalLink className="w-4 h-4" />
-                    </button>
+                    </a>
                 </div>
             </div>
         </section>
