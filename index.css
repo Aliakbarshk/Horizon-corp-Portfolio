@@ -1,4 +1,4 @@
-/* Browser-compatible global styles */
+/* Browser-compatible global styles - Removed @tailwind directives to rely on CDN */
 body { margin: 0; background-color: #050505; color: white; overflow-x: hidden; }
 html { scroll-behavior: smooth; }
 
