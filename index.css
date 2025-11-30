@@ -1,4 +1,4 @@
-/* Browser-compatible global styles - Removed @tailwind directives to rely on CDN */
+/* Standard CSS - Tailwind handled via CDN in index.html */
 body { margin: 0; background-color: #050505; color: white; overflow-x: hidden; }
 html { scroll-behavior: smooth; }
 

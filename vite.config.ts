@@ -6,14 +6,8 @@ export default defineConfig({
   plugins: [react()],
   build: {
     outDir: 'dist',
-    sourcemap: false,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          vendor: ['react', 'react-dom', 'three', '@react-three/fiber', '@react-three/drei'],
-          icons: ['lucide-react']
-        }
-      }
-    }
+    sourcemap: true,
+    // Removed 'external' and 'rollupOptions' to force bundling of all dependencies.
+    // This fixes the "Black Screen" on Netlify by ensuring React/Three.js are included in the file.
   }
 })
